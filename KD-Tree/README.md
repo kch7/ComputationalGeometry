@@ -1,3 +1,8 @@
+# Implementation
+
+In this file, i implement a KD-Tree with k=2 and an Orthogonal Range Search function.
+
+
 # Brief Instructions
 
 In order to execute the Python file called kdtree.py, you have to run this command through a terminal:
