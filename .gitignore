@@ -1,7 +1,39 @@
+# Byte-compiled / caching
 __pycache__/
-__pycache__
 *.py[cod]
+
+# Swap / editor backups
+*.swp          # vim swap
+*.txt.swp
+*~             # editor backup files
+*.swo
+*.swn
+
+# Distribution / packaging
 *.egg-info/
 *.egg
 build/
 dist/
+*.whl
+
+# Virtual envs / env files
+.env/
+venv/
+.envrc
+*.env
+
+# Logs / databases
+*.log
+*.sqlite3
+
+# Coverage / test artifacts
+.pytest_cache/
+htmlcov/
+.coverage
+
+# IDEs / editors
+.vscode/
+.idea/
+
+# OS cruft
+.DS_Store
