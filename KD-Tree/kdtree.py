@@ -2,6 +2,8 @@ import numpy as np
 import itertools
 import matplotlib.pyplot as plt
 
+
+#I initiate a class called point , so as to use it in the node of the KD-Tree.
 class Point:
     def __init__(self, x, y):
         self.x = x
@@ -10,7 +12,7 @@ class Point:
     def __repr__(self):
         return f"Point({self.x:.2f}, {self.y:.2f})"
 
-#With thi function , the Euclidean Distance is computed.
+#With this function , the Euclidean Distance is computed.
 def distance(point1: Point, point2: Point):
     return np.sqrt((point1.x - point2.x)**2 + (point1.y - point2.y)**2)
 
@@ -43,6 +45,7 @@ def KDTree(points:list,depth=0):
 
     return node
 
+#With this function, the KD-Tree is plotted
 def Plot(node:KDNode,depth:int,bounds:list,ax=None):
     if node is None:
         return None
@@ -138,5 +141,6 @@ s=RangeSearch(kd_tree,[x_min,x_max,y_min,y_max],0)
 if s is not None:
     print(str(len(s))+str(" points were found "))
     PlotStepByStep(x_min,x_max,y_min,y_max,s)
+#If s is equal to None, then x or y or both are out of range
 elif s is None:
     print("Range Search is unsuccessful")
