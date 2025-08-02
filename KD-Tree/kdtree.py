@@ -123,13 +123,14 @@ def PlotStepByStep(x_min:int,x_max:int,y_min:int,y_max:int,s:list):
 x=abs(int(input("Give me number x (The range of points): ")))
 y=abs(int(input("Give me number y (The number of points): ")))
 print("The range of the points is : ",(-x,x))
-#Here you insert the ranges of the query search for the x-axis and the y-axis
+#Here you insert the ranges of the query search for the x-axis and the y-axis.
 x_min=int(input("Give me number x_min (The minimum x-value): "))
 x_max=int(input("Give me number x_max (The maximum x-value): "))
 y_min=int(input("Give me number y_min (The minimum y-value): "))
 y_max=int(input("Give me number y_max (The maximum y-value): "))
 L = [Point(np.random.uniform(-x,x), np.random.uniform(-x,x)) for _ in range((y))]
 
+#The points are printed for further comprehension.
 print("Points:", L)
 kd_tree=KDTree(L)
 Plot(kd_tree, 0, [-x,x,-x,x], None)
@@ -137,10 +138,10 @@ plt.show()
 
 
 s=RangeSearch(kd_tree,[x_min,x_max,y_min,y_max],0)
-#A result in the range query search has been found
+#A result in the range query search has been found.
 if s is not None:
     print(str(len(s))+str(" points were found "))
     PlotStepByStep(x_min,x_max,y_min,y_max,s)
-#If s is equal to None, then x or y or both are out of range
+#If s is equal to None, then x or y or both are out of range.
 elif s is None:
     print("Range Search is unsuccessful")
