@@ -1,5 +1,6 @@
 # Byte-compiled / caching
 __pycache__/
+__pycache__
 *.py[cod]
 
 # Swap / editor backups
