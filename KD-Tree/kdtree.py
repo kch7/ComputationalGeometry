@@ -87,6 +87,7 @@ def RangeSearch(node:KDNode,bounds:list,depth,results=None):
     axis = depth % 2
 
     if x_min <= x <= x_max and y_min <= y <= y_max:
+        print(f"Point {node.point} is within bounds {bounds}")
         if results is None:
             results = []
         results.append(node.point)
@@ -106,10 +107,20 @@ def RangeSearch(node:KDNode,bounds:list,depth,results=None):
 
 
 #In this function, i sort the points in ascending order by their x-coordinate.
-def PlotStepByStep(x_min:int,x_max:int,y_min:int,y_max:int,s:list):
+def PlotStepByStep(points:list,x_min:int,x_max:int,y_min:int,y_max:int,s:list):
     sorted_points=sorted(s,key=lambda point:point.x)
     pointslist=[]
+
+    inside = sorted(s, key=lambda p: p.x)
+    outside = [p for p in points if p not in s]
+    a=[point.x for point in outside]
+    b=[point.y for point in outside]
+    
+    plt.scatter(a,b,marker='x',color='black')
+    rect = plt.Rectangle((x_min, y_min), x_max-x_min, y_max-y_min, edgecolor='blue', facecolor='none', linestyle='--')
+    plt.gca().add_patch(rect)
     for point in sorted_points:
+        plt.scatter(a,b,marker='x',color='black')
         rect = plt.Rectangle((x_min, y_min), x_max-x_min, y_max-y_min, edgecolor='blue', facecolor='none', linestyle='--')
         plt.gca().add_patch(rect)
         pointslist.append((point.x,point.y))
@@ -129,7 +140,10 @@ x_max=int(input("Give me number x_max (The maximum x-value): "))
 y_min=int(input("Give me number y_min (The minimum y-value): "))
 y_max=int(input("Give me number y_max (The maximum y-value): "))
 L = [Point(np.random.uniform(-x,x), np.random.uniform(-x,x)) for _ in range((y))]
-
+px = [point.x for point in L]
+py = [point.y for point in L]
+print("the length of px is : ",len(px))
+print("the length of py is : ",len(py))
 #The points are printed for further comprehension.
 print("Points:", L)
 kd_tree=KDTree(L)
@@ -141,7 +155,7 @@ s=RangeSearch(kd_tree,[x_min,x_max,y_min,y_max],0)
 #A result in the range query search has been found.
 if s is not None:
     print(str(len(s))+str(" points were found "))
-    PlotStepByStep(x_min,x_max,y_min,y_max,s)
+    PlotStepByStep(L,x_min,x_max,y_min,y_max,s)
 #If s is equal to None, then x or y or both are out of range.
 elif s is None:
     print("Range Search is unsuccessful")
