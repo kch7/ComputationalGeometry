@@ -29,7 +29,12 @@ class KDNode:
     def __len__(self):
         return 2
 
+#This function builds a KD-Tree recursively. The depth is used to determine the axis for splitting the points.
+#The axis is determined by the depth modulo k, where k is the number of dimensions (2 in this case).
+#The points are sorted based on the current axis, and the median point is chosen as the root of the subtree.
+#The left and right subtrees are built recursively with the remaining points.
 def KDTree(points:list,depth=0):
+    #If the list of points is empty, then the KD-Tree is None.
     if not points:
         return None
 
