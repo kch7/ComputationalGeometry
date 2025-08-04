@@ -10,7 +10,7 @@ In order to download locally my repository, you have to execute these commands:
 <pre>pip install -r requirements.txt</pre>
 <pre>cd ComputationalGeometry</pre>
 
-And,then you can navigate to the folder you want and execute the algorithm you wish.
+And then you can navigate to the folder you want and execute the algorithm you wish.
 
 For instance, if you want to navigate to the folder containing the implementation of KD-Tree, 
 then you have to insert this command into the terminal:
