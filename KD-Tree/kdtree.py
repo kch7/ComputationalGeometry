@@ -92,7 +92,7 @@ def RangeSearch(node:KDNode,bounds:list,depth,results=None):
     axis = depth % 2
 
     if x_min <= x <= x_max and y_min <= y <= y_max:
-        print(f"Point {node.point} is within bounds {bounds}")
+        print(f"{node.point} is within bounds {bounds}")
         if results is None:
             results = []
         results.append(node.point)
@@ -133,34 +133,32 @@ def PlotStepByStep(points:list,x_min:int,x_max:int,y_min:int,y_max:int,s:list):
         plt.plot(xs, ys, 'ro')
         plt.show()
     
-
-    
+if __name__ == "__main__":
+    print("Welcome to the KD-Tree Range Search Program!")
+    print("This program allows you to create a KD-Tree from random points and perform a range search.")
+    print("You will be prompted to enter the range of coordinates for the points and the number of points.")
+    print("Then, you will specify the range for the x-axis and y-axis for the range search.")    
 #Here you insert the range of the coordinates of the points and the number of points. Both x,y are properly sanitized.
-x=abs(int(input("Give me number x (The range of points): ")))
-y=abs(int(input("Give me number y (The number of points): ")))
-print("The range of the points is : ",(-x,x))
+    x=abs(int(input("Give me number x (The range of points): ")))
+    y=abs(int(input("Give me number y (The number of points): ")))
+    print("The range of the points is : ",(-x,x))
 #Here you insert the ranges of the query search for the x-axis and the y-axis.
-x_min=int(input("Give me number x_min (The minimum x-value): "))
-x_max=int(input("Give me number x_max (The maximum x-value): "))
-y_min=int(input("Give me number y_min (The minimum y-value): "))
-y_max=int(input("Give me number y_max (The maximum y-value): "))
-L = [Point(np.random.uniform(-x,x), np.random.uniform(-x,x)) for _ in range((y))]
-px = [point.x for point in L]
-py = [point.y for point in L]
-print("the length of px is : ",len(px))
-print("the length of py is : ",len(py))
+    x_min=int(input("Give me number x_min (The minimum x-value): "))
+    x_max=int(input("Give me number x_max (The maximum x-value): "))
+    y_min=int(input("Give me number y_min (The minimum y-value): "))
+    y_max=int(input("Give me number y_max (The maximum y-value): "))
+    L = [Point(np.random.uniform(-x,x), np.random.uniform(-x,x)) for _ in range((y))]
 #The points are printed for further comprehension.
-print("Points:", L)
-kd_tree=KDTree(L)
-Plot(kd_tree, 0, [-x,x,-x,x], None)
-plt.show()
+    print("Points:", L)
+    kd_tree=KDTree(L)
+    Plot(kd_tree, 0, [-x,x,-x,x], None)
+    plt.show()
 
-
-s=RangeSearch(kd_tree,[x_min,x_max,y_min,y_max],0)
+    s=RangeSearch(kd_tree,[x_min,x_max,y_min,y_max],0)
 #A result in the range query search has been found.
-if s is not None:
-    print(str(len(s))+str(" points were found "))
-    PlotStepByStep(L,x_min,x_max,y_min,y_max,s)
+    if s is not None:
+        print(str(len(s))+str(" points were found "))
+        PlotStepByStep(L,x_min,x_max,y_min,y_max,s)
 #If s is equal to None, then x or y or both are out of range.
-elif s is None:
-    print("Range Search is unsuccessful")
+    elif s is None:
+        print("Range Search is unsuccessful")
