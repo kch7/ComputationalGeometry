@@ -33,56 +33,47 @@ class KDNode:
 #The axis is determined by the depth modulo k, where k is the number of dimensions (2 in this case).
 #The points are sorted based on the current axis, and the median point is chosen as the root of the subtree.
 #The left and right subtrees are built recursively with the remaining points.
-def KDTree(points:list,depth=0):
-    #If the list of points is empty, then the KD-Tree is None.
+def KDTree(points: list, bounds: list, depth=0, ax=None):
     if not points:
         return None
 
-    k=2
-    axis=depth % k
-    sorted_points = sorted(points, key=lambda p: (p.x,p.y)[axis])
-    #The chosen index is the upper bound of n/2.
+    k = 2
+    axis = depth % k
+    sorted_points = sorted(points, key=lambda p: (p.x, p.y)[axis])
     median_index = len(sorted_points) // 2
-    #At first, I initialize my KD-Tree by adding the median-index node , and then I recursively add up the nodes 
-    node=KDNode(sorted_points[median_index])
-    node.left = KDTree(sorted_points[:median_index], depth + 1)
-    node.right = KDTree(sorted_points[median_index + 1:], depth + 1)
+    node = KDNode(sorted_points[median_index]) 
+    Plot(node, depth, bounds, ax)
+    if axis == 0:
+        node.left = KDTree(sorted_points[:median_index], [bounds[0], node.point.x, bounds[2], bounds[3]], depth+1, ax)
+        node.right = KDTree(sorted_points[median_index+1:], [node.point.x, bounds[1], bounds[2], bounds[3]], depth+1, ax)
+    else:
+        node.left = KDTree(sorted_points[:median_index], [bounds[0], bounds[1], bounds[2], node.point.y], depth+1, ax)
+        node.right = KDTree(sorted_points[median_index+1:], [bounds[0], bounds[1], node.point.y, bounds[3]], depth+1, ax)
 
     return node
 
+
 #With this function, the KD-Tree is plotted
-def Plot(node:KDNode,depth:int,bounds:list,ax=None):
+def Plot(node: KDNode, depth: int, bounds: list, ax):
     if node is None:
-        return None
-    
-    if ax is None:
-        fig,ax=plt.subplots()
-        ax.set_xlim(bounds[0],bounds[1])
-        ax.set_ylim(bounds[2],bounds[3])
+        return
 
-    x_min,x_max,y_min,y_max=bounds
-    x,y=node.point.x,node.point.y
-    axis=depth%2
+    x_min, x_max, y_min, y_max = bounds
+    x, y = node.point.x, node.point.y
+    axis = depth % 2
 
-    if axis==0:
-        ax.plot([x,x],[y_min,y_max],'r--')
-        Plot(node.left,depth+1,[x_min,x,y_min,y_max],ax)
-        Plot(node.right,depth+1,[x,x_max,y_min,y_max],ax)
-    if axis==1:
-        ax.plot([x_min,x_max],[y,y],'g--')
-        Plot(node.left,depth+1,[x_min,x_max,y_min,y],ax)
-        Plot(node.right,depth+1,[x_min,x_max,y,y_max],ax)
-    ax.plot(x,y,'ko')
+    # Draw the splitting line
+    if axis == 0:  # vertical
+        ax.plot([x, x], [y_min, y_max], 'r--')
+    else:  # horizontal
+        ax.plot([x_min, x_max], [y, y], 'g--')
+    ax.plot(x, y, 'ko')
+    plt.pause(0.5)
 
-def Print(node:KDNode,depth):
-    if node is None:
-        return node
-    else:
-        print(node)
-        Print(node.left,depth+1)
-        Print(node.right,depth+1)
 
-def RangeSearch(node:KDNode,bounds:list,depth,results=None):
+
+
+def RangeSearch(node:KDNode,bounds:list,depth,results):
     if node is None:
         return []
     
@@ -98,14 +89,14 @@ def RangeSearch(node:KDNode,bounds:list,depth,results=None):
         results.append(node.point)
 
     if axis == 0:  # Vertical line
-        if x_min <= node.point.x:
+        if x_min <= x:
             RangeSearch(node.left, bounds, depth + 1, results)
-        if x_max >= node.point.x:
+        if x_max >= x:
             RangeSearch(node.right, bounds, depth + 1, results)
     else:
-        if y_min <= node.point.y:
+        if y_min <= y:
             RangeSearch(node.left, bounds, depth + 1, results)
-        if y_max >= node.point.y:
+        if y_max >= y:
             RangeSearch(node.right, bounds, depth + 1, results)    
     
     return results
@@ -131,10 +122,13 @@ def PlotStepByStep(points:list,x_min:int,x_max:int,y_min:int,y_max:int,s:list):
         pointslist.append((point.x,point.y))
         xs,ys=zip(*pointslist)
         plt.plot(xs, ys, 'ro')
-        plt.show()
+        plt.pause(0.5)
+        #plt.show()
+
+
     
 if __name__ == "__main__":
-    print("Welcome to the KD-Tree Range Search Program!")
+    print("Welcome to the KD-Tree and Range Search Program!")
     print("This program allows you to create a KD-Tree from random points and perform a range search.")
     print("You will be prompted to enter the range of coordinates for the points and the number of points.")
     print("Then, you will specify the range for the x-axis and y-axis for the range search.")    
@@ -150,15 +144,17 @@ if __name__ == "__main__":
     L = [Point(np.random.uniform(-x,x), np.random.uniform(-x,x)) for _ in range((y))]
 #The points are printed for further comprehension.
     print("Points:", L)
-    kd_tree=KDTree(L)
-    Plot(kd_tree, 0, [-x,x,-x,x], None)
-    plt.show()
-
-    s=RangeSearch(kd_tree,[x_min,x_max,y_min,y_max],0)
+    bounds=[-x,x,-x,x]
+    fig, ax = plt.subplots()
+    ax.set_xlim(bounds[0], bounds[1])
+    ax.set_ylim(bounds[2], bounds[3])
+    kd_tree=KDTree(L, [-x,x,-x,x],0,ax)
+    ax.clear()  # Clear the plot for the final result
+    results=[]
+    s=RangeSearch(kd_tree,[x_min,x_max,y_min,y_max],0,results)
 #A result in the range query search has been found.
-    if s is not None:
+    if s:
         print(str(len(s))+str(" points were found "))
         PlotStepByStep(L,x_min,x_max,y_min,y_max,s)
-#If s is equal to None, then x or y or both are out of range.
-    elif s is None:
+    else:
         print("Range Search is unsuccessful")
