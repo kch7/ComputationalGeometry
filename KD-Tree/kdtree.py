@@ -1,6 +1,7 @@
 import numpy as np
 import itertools
 import matplotlib.pyplot as plt
+import sys
 
 
 #I initiate a class called point , so as to use it in the node of the KD-Tree.
@@ -83,7 +84,6 @@ def RangeSearch(node:KDNode,bounds:list,depth,results):
     axis = depth % 2
 
     if x_min <= x <= x_max and y_min <= y <= y_max:
-        print(f"{node.point} is within bounds {bounds}")
         if results is None:
             results = []
         results.append(node.point)
@@ -106,7 +106,7 @@ def RangeSearch(node:KDNode,bounds:list,depth,results):
 def PlotStepByStep(points:list,x_min:int,x_max:int,y_min:int,y_max:int,s:list):
     sorted_points=sorted(s,key=lambda point:point.x)
     pointslist=[]
-
+    fig=plt.figure()
     inside = sorted(s, key=lambda p: p.x)
     outside = [p for p in points if p not in s]
     a=[point.x for point in outside]
@@ -123,10 +123,31 @@ def PlotStepByStep(points:list,x_min:int,x_max:int,y_min:int,y_max:int,s:list):
         xs,ys=zip(*pointslist)
         plt.plot(xs, ys, 'ro')
         plt.pause(0.5)
-        #plt.show()
-
-
     
+    plt.savefig("final_plotstep.png", dpi=300, bbox_inches='tight')
+    plt.close()
+
+
+def Create(L:list,bounds:list):
+    print("Points:", L)
+    fig, ax = plt.subplots()
+    ax.set_xlim(bounds[0], bounds[1])
+    ax.set_ylim(bounds[2], bounds[3])
+    kd_tree=KDTree(L, bounds,0,ax)
+    plt.pause(2)
+    plt.savefig("final_kd_tree.png", bbox_inches='tight')
+    plt.close(fig)
+    ax.clear()  # Clear the plot for the final result
+    return kd_tree
+    
+def WriteResults(results:list):
+    with open("results.txt", "w") as f:
+        f.write(str(len(results))+str(" points were found \n"))
+        for point in results:
+            f.write(f"{point}\n")
+        f.close()
+
+
 if __name__ == "__main__":
     print("Welcome to the KD-Tree and Range Search Program!")
     print("This program allows you to create a KD-Tree from random points and perform a range search.")
@@ -143,18 +164,12 @@ if __name__ == "__main__":
     y_max=int(input("Give me number y_max (The maximum y-value): "))
     L = [Point(np.random.uniform(-x,x), np.random.uniform(-x,x)) for _ in range((y))]
 #The points are printed for further comprehension.
-    print("Points:", L)
-    bounds=[-x,x,-x,x]
-    fig, ax = plt.subplots()
-    ax.set_xlim(bounds[0], bounds[1])
-    ax.set_ylim(bounds[2], bounds[3])
-    kd_tree=KDTree(L, [-x,x,-x,x],0,ax)
-    ax.clear()  # Clear the plot for the final result
+    kd_tree=Create(L,[-x,x,-x,x])
     results=[]
     s=RangeSearch(kd_tree,[x_min,x_max,y_min,y_max],0,results)
 #A result in the range query search has been found.
     if s:
-        print(str(len(s))+str(" points were found "))
+        WriteResults(s)
         PlotStepByStep(L,x_min,x_max,y_min,y_max,s)
     else:
         print("Range Search is unsuccessful")
