@@ -49,6 +49,9 @@ def Plot(x:np.ndarray,y:np.ndarray,z:np.ndarray,hull:list,s,mode=False):
     ax.set_zlabel('Z-axis')
     ax.legend(['Convex Hull'])
     plt.tight_layout()
+    if(mode==False):
+        savepath="./results/convex_hull_incremental_3d.png"
+        plt.savefig(savepath)
     plt.show()
 
 def border_edges(visible_faces, all_faces):
@@ -71,13 +74,28 @@ def border_edges(visible_faces, all_faces):
     return edges
 
 
-def InitialTetrahedron(L)->list:
-    #In order to retrieve the initial tetrahedron i use 8 points . As a result my function checks (8!/(4!*4!))=70 combinations.
+def Normalize(a,b,c,d,faces:list):
+    fixed=[]
+    centroid=np.mean(np.array([a,b,c,d]),axis=0)
+    for face in faces:
+        if face.visible(centroid):
+            face.vertices[1], face.vertices[2] = face.vertices[2], face.vertices[1]
+        fixed.append(face)
+    return fixed
+
+
+def InitialTetrahedron(L) -> list:
     for combs in itertools.combinations(L, 4):
         a, b, c, d = combs
         if abs(TetVolume(a, b, c, d)) > 1e-6:
-            return [Face(a, b, c), Face(a, c, d), Face(a, d, b), Face(b, d, c)]
+            faces = [Face(a, b, c), Face(a, c, d), Face(a, d, b), Face(b, d, c)]
+            
+            fixed=Normalize(a,b,c,d,faces)
+            return fixed
+    # If no valid tetrahedron is found, raise an error.
+    # This should not happen with a sufficient number of points.
     raise ValueError("The points are coplanar.")
+
 
 def Incremental3D(points:list)->list:
     if len(points) < 4:
