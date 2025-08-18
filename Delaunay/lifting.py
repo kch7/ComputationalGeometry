@@ -51,4 +51,5 @@ if __name__ =="__main__":
     Triangulation=DelaunayTriangulation(x,y,hull)
     TriangulationPlot(ax, Triangulation,points)       # Plot Delaunay Triangulation
     plt.tight_layout()
-    plt.show()
+    plt.savefig("triangulation.png")
+    #plt.show()
