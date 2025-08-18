@@ -7,28 +7,27 @@ import matplotlib.pyplot as plt
 import math
 
 
-def TriangulationPlot(x:list,y:list,triangles:list):
-    plt.figure(figsize=(6, 6))
-    #plt.scatter(x, y, color='blue')    
+def TriangulationPlot(ax,triangles:list,points:list):
     for triangle in triangles:
-        xs,ys=zip(*triangle)
-        plt.plot(xs,ys)
-    plt.title("Delaunay Triangulation")
-    plt.xlabel("X")
-    plt.ylabel("Y")
-    plt.axis('equal')
-    plt.grid(True)
-    plt.show()
+        xs, ys = zip(*triangle)
+        ax.plot(xs, ys)
+    xf,yf,zf=zip(*points)
+    ax.scatter(xf,yf,c='red',s=15)
+    ax.set_title("Delaunay Triangulation")
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.axis('equal')
+    ax.grid(True)
 
 def DelaunayTriangulation(x:list,y:list,hull:list):
     triangles=[]
     #In this function , I break up each face of the hull, and i convert the coordinates of each face from tuple to np.ndarray.
     for face in hull:
-        v0=np.array(face.vertices[0])
-        v1=np.array(face.vertices[1])
-        v2=np.array(face.vertices[2])
-        #Here, we compute the cross product between 
-        normal=np.cross(v2-v0,v1-v0)
+        v0=np.array(face.vertices[0],dtype=float)
+        v1=np.array(face.vertices[1],dtype=float)
+        v2=np.array(face.vertices[2],dtype=float)
+        #Here, we compute the cross product between the differences of the vertices.
+        normal = np.cross(v1 - v0, v2 - v0)
         #If the z-component is negative, then a Delaunay Triangle has been found.
         if normal[2]<0:
             triangle_2d=[(v[0],v[1]) for v in face.vertices]
@@ -38,19 +37,18 @@ def DelaunayTriangulation(x:list,y:list,hull:list):
 
     return triangles
     
-        
-
-
-
+    
 if __name__ =="__main__":
     print("Delaunay Triangulation")
-    print("This program prints the Delaunay Triangulation of a set of points by creating at first their Delaunay Triangulation.")
+    print("This program prints the Delaunay Triangulation of a set of points by creating at first their 3D-Convex Hull.")
     s=int(input("Please, give me the number of points used in Delaunay Triangulation : "))
-    L = np.random.uniform(-200, 200, (s, 3))
-    points=[(x,y,z) for x,y,z in L]    
+    L = np.random.uniform(-250, 250, (s, 2))
+    points=[(x,y,x**2+y**2) for x,y in L]
     x = np.array([pt[0] for pt in points])
     y = np.array([pt[1] for pt in points])
-    z = np.array([pt[0]**2 + pt[1]**2 for pt in points])
+    fig,ax=plt.subplots(figsize=(12,8))
     hull=Incremental3D(points)
     Triangulation=DelaunayTriangulation(x,y,hull)
-    TriangulationPlot(x,y,Triangulation)
+    TriangulationPlot(ax, Triangulation,points)       # Plot Delaunay Triangulation
+    plt.tight_layout()
+    plt.show()
