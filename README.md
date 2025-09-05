@@ -18,4 +18,4 @@ then you have to insert this command into the terminal:
 <pre>cd ComputationalGeometry/KD-Tree</pre>
 
 And then, you can run the .py file called KD-Tree.
-The process is the same in all implementations of this repository.
+The process is the same for all implementations of this repository.
