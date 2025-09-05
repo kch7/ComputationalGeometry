@@ -1,9 +1,9 @@
 # Delaunay Triangulation
 
 Regarding the Delaunay Triangulation via lifting, at first i computed the 3D-Convex Hull by using the Incremental Algorithm and by raising the points to the parabola z=x^2+y^2. As a result, the form of the points was the following: (x,y,x^2+y^2).
-After computing the 3D-Convex Hull,i created a function called Delaunay Triangulation. In this specific function, i divide each face of the hull, into its components(its vertices) and then i compute the cross product of those two matrices : <pre>(np.cross(v2-v0,v1-v0))</pre>.
-If the third component of the product is less than 0, then i create each triangle and append it to a list called triangles. The list called triangles includes all triangles of the Delaunay Triangulation.
-In main, at first i compute the 3D-Convex Hull, so that i get the hull, and then i call the function "Triangulation".
+After computing the 3D-Convex Hull,i created a function called Delaunay Triangulation. In this specific function, i divided each face of the hull, into its components(its vertices) and then i computed the cross product of those two matrices : <pre>(np.cross(v2-v0,v1-v0)).</pre>
+If the third component of the product was less than 0, then i would create each triangle and append it to a list called triangles. The list called triangles included all triangles of the Delaunay Triangulation.
+In main, at first i computed the 3D-Convex Hull, so that i would get the hull, and then i called the function "Triangulation".
 
 
 # Useful Info 
