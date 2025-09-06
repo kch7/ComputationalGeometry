@@ -13,9 +13,6 @@ class Point:
     def __repr__(self):
         return f"Point({self.x:.2f}, {self.y:.2f})"
 
-#With this function , the Euclidean Distance is computed.
-def distance(point1: Point, point2: Point):
-    return np.sqrt((point1.x - point2.x)**2 + (point1.y - point2.y)**2)
 
 class KDNode:
     def __init__(self, point, left=None, right=None):
