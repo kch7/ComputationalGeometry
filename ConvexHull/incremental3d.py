@@ -73,7 +73,10 @@ def border_edges(visible_faces, all_faces):
 
     return edges
 
-
+#With this function, I ensure that the orientation of the faces is consistent.
+#If i find an appropriate tetrahedron, then i pass it up to the function below
+#The function computes the centroid of the tetrahedron and checks if each face is visible from it
+#If a face is visible, then i swap two of its vertices to change its orientation
 def Normalize(a,b,c,d,faces:list):
     fixed=[]
     centroid=np.mean(np.array([a,b,c,d]),axis=0)
