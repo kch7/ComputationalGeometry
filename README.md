@@ -1,5 +1,5 @@
 # Computational Geometry
-This repository contains the implementation of incremental algorithm for the 3D Convex Hull and the implementation of the Delaunay Triangulation via lifting. Also, it includes a simple and comprehensive implementation for KD-Tree with k=2.
+This repository contains the implementation of incremental algorithm for the 3D Convex Hull and the implementation of the Delaunay Triangulation via lifting. Also, it includes a simple and comprehensive implementation for KD-Tree with k=2. Additionally, i have implemented Voronoi Diagrams via the method of tangent planes.
 
 
 # Instructions
