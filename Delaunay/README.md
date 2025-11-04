@@ -5,10 +5,15 @@ After computing the 3D-Convex Hull,i created a function called Delaunay Triangul
 If the third component of the product was less than 0, then i would create each triangle and append it to a list called triangles. The list called triangles included all triangles of the Delaunay Triangulation.
 In main, at first i computed the 3D-Convex Hull, so that i would get the hull, and then i called the function "Triangulation".
 
+Now, i have added another method of creating a Delaunay Triangulation. This method is called Bowyer-Watson. In order to implement this method, we have to compute at first a super-triangle. A super-triangle is called the triangle that encloses all given two-dimensional points. Then the algorithm i follow for the implementation is derived from Wikipedia. 
+
+
 
 # Useful Info 
 
 In order to avoid dependency issues, inside Delaunay directory, i have created a blank file called __init__.py.
-Also, in the libraries of lifting.py, i have added this specific line: <pre>sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))</pre> , so as to ensure that lifting.py is able to use the functions required for the computation of the convex hull.
+Also, in the libraries of lifting.py, i have added this specific line: <pre>sys.path.append('..')</pre> , so as to ensure that lifting.py is able to use the functions required for the computation of the convex hull.
+
+
 
 
